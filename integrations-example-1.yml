@@ -1,0 +1,110 @@
+# API Commons — Integrations, illustrative example
+#
+# A slice of the connector catalog for a made-up integration platform on example.com.
+#
+# The fields worth noticing are `partner_domain`, `kind` and `built_by`. On a real
+# marketplace page all of these entries look identical — a logo and a link. They are
+# not: some are maintained by the provider, some by the partner, some by a contributor
+# who has since moved on, and `built_by` is the difference between a supported
+# integration and one that will quietly stop working.
+
+- name: Salesforce
+  url: https://example.com/connectors/salesforce/
+  partner_domain: salesforce.com
+  category: CRM
+  kind: connector
+  direction: bidirectional
+  built_by: first-party
+  status: ga
+  auth: oauth2
+
+- name: HubSpot
+  url: https://example.com/connectors/hubspot/
+  partner_domain: hubspot.com
+  category: CRM
+  kind: connector
+  direction: bidirectional
+  built_by: first-party
+  status: ga
+  auth: oauth2
+
+- name: Stripe
+  url: https://example.com/connectors/stripe/
+  partner_domain: stripe.com
+  category: Payments
+  kind: connector
+  direction: inbound
+  built_by: first-party
+  status: ga
+  auth: api-key
+
+- name: Slack
+  url: https://example.com/connectors/slack/
+  partner_domain: slack.com
+  category: Communication
+  kind: app
+  direction: outbound
+  built_by: first-party
+  status: ga
+  auth: oauth2
+
+- name: Active Directory
+  url: https://example.com/connectors/ldap/
+  partner_domain: microsoft.com
+  category: Identity
+  kind: connector
+  direction: inbound
+  built_by: first-party
+  status: ga
+  auth: basic
+  note: >-
+    Listed under its common name rather than its slug. The listing URL says `ldap` — a
+    catalog's own URLs and its display names drift apart, which is why `partner_domain`
+    is the field to join on.
+
+- name: Amazon S3
+  url: https://example.com/connectors/s3/
+  partner_domain: aws.amazon.com
+  category: Storage
+  kind: connector
+  direction: bidirectional
+  built_by: first-party
+  status: ga
+  auth: api-key
+
+- name: Netsuite
+  url: https://example.com/connectors/netsuite/
+  partner_domain: netsuite.com
+  category: ERP
+  kind: connector
+  direction: bidirectional
+  built_by: partner
+  status: ga
+  auth: oauth2
+  tiers:
+    - Enterprise
+
+- name: Zendesk
+  url: https://example.com/connectors/zendesk/
+  partner_domain: zendesk.com
+  category: Support
+  kind: connector
+  direction: bidirectional
+  built_by: community
+  status: beta
+  auth: api-key
+  note: >-
+    Community-maintained. Same logo on the marketplace page as the first-party
+    connectors above, very different support expectation.
+
+- name: Generic webhook
+  url: https://example.com/connectors/webhook/
+  category: Custom
+  kind: webhook
+  direction: outbound
+  built_by: first-party
+  status: ga
+  auth: none
+  note: >-
+    No `partner_domain`, correctly — there is no partner. Not every catalog entry is a
+    company, and the schema should not force one.

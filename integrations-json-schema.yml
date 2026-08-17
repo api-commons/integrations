@@ -1,0 +1,172 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://raw.githubusercontent.com/api-commons/integrations/main/integrations-json-schema.yml
+title: API Commons Integrations
+description: >-
+  A machine-readable catalog of the other services an API already connects to — the
+  connector, app, or marketplace listing every SaaS platform publishes and nobody can
+  query. This is the schema behind the Integrations property in API Commons.
+
+  An integrations page is a list of hundreds of logos with a link under each. It is the
+  single best public statement of who a provider interoperates with, and it is locked in
+  HTML. Making it machine-readable turns it into something you can diff against a
+  competitor, resolve to the providers on the other end, and check for rot — the field
+  most worth filling in is `partner_domain`, because it is what lets a name in a catalog
+  be resolved to an actual company.
+
+oneOf:
+  - title: Integrations document
+    description: A bare list of integrations — a standalone integrations file.
+    type: array
+    minItems: 1
+    items:
+      $ref: '#/$defs/integration'
+  - title: Integrations properties
+    description: >-
+      One or more Integrations properties as they appear inside an apis.yml / apis.json
+      index, each carrying its integrations under `data`.
+    type: array
+    minItems: 1
+    items:
+      $ref: '#/$defs/integrationsProperty'
+
+$defs:
+
+  integrationsProperty:
+    type: object
+    additionalProperties: false
+    required:
+      - type
+      - data
+    properties:
+      name:
+        type: string
+        description: The name of the property as it appears in the index.
+      type:
+        const: Integrations
+        description: The API Commons property type. Always Integrations.
+      description:
+        type: string
+        description: What this catalog covers.
+      url:
+        type: string
+        format: uri
+        description: The catalog or marketplace page this was read from.
+      source_date:
+        type: string
+        format: date
+        description: The date this was last verified against that page.
+      count:
+        type: integer
+        minimum: 0
+        description: >-
+          The number of integrations the provider claims on that page. Recorded
+          separately from the length of `data` on purpose — when the two disagree, the
+          catalog has been sampled rather than harvested, and a reader should know.
+      data:
+        type: array
+        minItems: 1
+        description: The integrations themselves.
+        items:
+          $ref: '#/$defs/integration'
+
+  integration:
+    type: object
+    additionalProperties: false
+    required:
+      - name
+    properties:
+
+      name:
+        type: string
+        minLength: 1
+        description: The name of the service on the other end, as the provider lists it.
+
+      url:
+        type: string
+        format: uri
+        description: The provider's listing page for this integration.
+
+      partner_domain:
+        type: string
+        format: hostname
+        description: >-
+          The apex domain of the service being integrated with — stripe.com, slack.com.
+          The highest-value field in the schema: a name is ambiguous across a catalog of
+          hundreds, a domain resolves to a company. It is what makes a catalog joinable
+          to a provider index rather than just readable.
+
+      partner_url:
+        type: string
+        format: uri
+        description: The partner's own site, where it differs from the apex domain.
+
+      category:
+        type: string
+        description: >-
+          The grouping the provider files it under — CRM, Payments, Identity, Storage.
+          Keep the provider's own vocabulary rather than normalising it away; the
+          categories themselves are evidence of how a provider sees its market.
+
+      kind:
+        description: >-
+          What the integration actually is. This distinction is usually invisible on a
+          marketplace page, where a first-party connector and a community plugin look
+          identical, and it is the first thing a consumer needs to know.
+        enum:
+          - connector
+          - app
+          - plugin
+          - webhook
+          - sdk
+          - template
+          - workflow
+          - embed
+
+      direction:
+        description: Which way the data moves.
+        enum:
+          - inbound
+          - outbound
+          - bidirectional
+
+      built_by:
+        description: >-
+          Who maintains it. A `community` integration and a `first-party` one carry very
+          different support expectations behind the same logo.
+        enum:
+          - first-party
+          - partner
+          - community
+          - third-party
+
+      status:
+        enum:
+          - preview
+          - beta
+          - ga
+          - deprecated
+          - retired
+
+      tiers:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        description: >-
+          The plans this integration is available on. Names should match the Plans
+          property where one exists.
+        items:
+          type: string
+
+      auth:
+        description: How the connection to the other service is authorized.
+        enum:
+          - oauth2
+          - api-key
+          - basic
+          - mtls
+          - token
+          - none
+
+      note:
+        type: string
+        description: Anything a consumer should know before relying on it.

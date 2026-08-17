@@ -1,0 +1,76 @@
+# API Commons — Integrations as an apis.yml property, illustrative example
+#
+# The envelope form. Note `count: 412` against nine entries in `data`.
+#
+# That is not an error, it is the point. Catalogs of this size are almost always sampled
+# rather than harvested, and recording what the provider claims separately from what was
+# captured is the difference between an honest partial catalog and one that silently
+# reads as complete. Compare it to `len(data)` before drawing any conclusion from this
+# file.
+
+- name: Connectors
+  type: Integrations
+  description: >-
+    The connector catalog for the Example integration platform. Partial capture — see
+    `count`.
+  url: https://example.com/connectors/
+  source_date: '2026-08-17'
+  count: 412
+  data:
+    - name: Salesforce
+      url: https://example.com/connectors/salesforce/
+      partner_domain: salesforce.com
+      category: CRM
+      kind: connector
+      direction: bidirectional
+      built_by: first-party
+      status: ga
+      auth: oauth2
+    - name: Stripe
+      url: https://example.com/connectors/stripe/
+      partner_domain: stripe.com
+      category: Payments
+      kind: connector
+      direction: inbound
+      built_by: first-party
+      status: ga
+      auth: api-key
+    - name: Slack
+      url: https://example.com/connectors/slack/
+      partner_domain: slack.com
+      category: Communication
+      kind: app
+      direction: outbound
+      built_by: first-party
+      status: ga
+      auth: oauth2
+
+- name: Marketplace Apps
+  type: Integrations
+  description: >-
+    Apps published by partners and the community, listed separately from the first-party
+    connectors because the support expectation is different.
+  url: https://example.com/marketplace/
+  source_date: '2026-08-17'
+  count: 87
+  data:
+    - name: Netsuite
+      url: https://example.com/marketplace/netsuite/
+      partner_domain: netsuite.com
+      category: ERP
+      kind: app
+      direction: bidirectional
+      built_by: partner
+      status: ga
+      auth: oauth2
+      tiers:
+        - Enterprise
+    - name: Zendesk
+      url: https://example.com/marketplace/zendesk/
+      partner_domain: zendesk.com
+      category: Support
+      kind: app
+      direction: bidirectional
+      built_by: community
+      status: beta
+      auth: api-key
